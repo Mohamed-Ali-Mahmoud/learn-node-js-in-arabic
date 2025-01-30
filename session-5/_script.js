@@ -82,7 +82,6 @@ app.post(
 );
 
 // update course
-
 // http://localhost:5000/api/courses/id
 app.patch("/api/courses/:courseId", (req, res) => {
   const id = +req.params.courseId;
