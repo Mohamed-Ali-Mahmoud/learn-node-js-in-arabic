@@ -4,12 +4,23 @@ const Course = require("../model/course.model");
 // import the express-validator package
 const { validationResult } = require("express-validator");
 
+// import the httpStatus
+const httpStatusText = require("../utils/httpStatusText");
 // Get All Courses
 const getAllCourses = async (req, res) => {
   // res.json(courses);
+
+  // add pagination to the courses
+  const query = req.query;
+  const limit = query.limit || 10;
+  const page = query.page || 1;
+  const skip = (page - 1) * limit;
+  // end of pagination
+
   // get all courses from the database uaing find method
-  const courses = await Course.find();
-  res.json(courses);
+
+  const courses = await Course.find({}, { __v: false }).limit(limit).skip(skip);
+  res.json({ status: httpStatusText.SUCCESS, data: courses });
 };
 
 // Get Single Course
@@ -28,11 +39,18 @@ const GetSingleCourse = async (req, res) => {
   try {
     const course = await Course.findById(req.params.coursesId);
     if (!course) {
-      res.status(404).json({ msg: "course not found!" });
+      res.status(404).json({
+        status: httpStatusText.FAIL,
+        data: { course: "course not found!" },
+      });
     }
-    res.status(200).json(course);
+    res.status(200).json({ status: httpStatusText.SUCCESS, data: course });
   } catch (err) {
-    res.status(400).json({ msg: "invalid object id" });
+    res.status(400).json({
+      status: httpStatusText.ERROR,
+      data: null,
+      message: err.message,
+    });
   }
 };
 
@@ -42,7 +60,9 @@ const AddCourse = async (req, res) => {
 
   // if is not empty return the error eles return the courses
   if (!error.isEmpty()) {
-    return res.status(400).json(error.array());
+    return res
+      .status(400)
+      .json({ status: httpStatusText.Fail, data: error.array() });
   }
 
   // console.log(error);
@@ -55,7 +75,7 @@ const AddCourse = async (req, res) => {
 
   const newCourse = new Course(req.body);
   await newCourse.save();
-  res.status(201).json(newCourse);
+  res.status(201).json({ status: httpStatusText.SUCCESS, data: newCourse });
 };
 
 // Update Course
@@ -82,9 +102,13 @@ const updateCourse = async (req, res) => {
       }
     );
 
-    return res.status(200).json(updatedCourse);
+    return res
+      .status(200)
+      .json({ status: httpStatusText.SUCCESS, data: updatedCourse });
   } catch (err) {
-    return res.status(400).json({ error: err });
+    return res
+      .status(400)
+      .json({ status: httpStatusText.ERROR, message: err.message });
   }
 };
 // Delete Course
@@ -96,7 +120,7 @@ const deleteCourse = async (req, res) => {
   // res.status(200).json({ msg: "the course was deleted successfully" });
 
   const deletedCourse = await Course.deleteOne({ _id: req.params.courseId });
-  res.status(200).json(deletedCourse);
+  res.status(200).json({ status: httpStatusText.SUCCESS, data: null });
 };
 
 module.exports = {

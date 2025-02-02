@@ -16,6 +16,7 @@
     "nodemon": "^3.1.9"
   },
   "devDependencies": {
+    "jsend": "^1.1.0",
     "mongoose": "^8.9.6"
   }
 }

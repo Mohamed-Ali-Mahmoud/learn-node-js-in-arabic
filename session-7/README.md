@@ -1,47 +1,69 @@
-# MonogoDB Atals
+# jSend
 
-1. أذهب إلى الرابط التالي: https://www.mongodb.com/products/platform/atlas-database
-2. اضغط على زر "Start Free" للتسجيل.
-3. سجل بال gmail الخاص بك.
-4. ![Add Project](image/addProject.png)
-5. ![Name Your Project](image/nameYourProject.png)
-6. ![Add Member](image/addMember-1.png)
-7. ![Create a Cluster](image/create-a-cluster.png)
-8. ![Deploy Your Clutser](image/deployYourCluster-1.png)
-9. ![Connect to Your Database](image/connectTo-1.png)
-10. ![Choose a Connection Method](image/choose-a-connection-method-1.png)
-11. ![Connect](image/connect.png)
-12. افتح الكومباس وقم بنسخ الرابط الذي تم الحصول عليه من الخطوة السابقة.
-13. ![MongoDB Compass](image/compass.png)
-14. ![Create Database in Compass](image/compass-create-database-1.png)
-15. ![Insert Document](image/insert-document-1.png)
-16. ![Create Document](image/insert-document-2-1.png)
+[jSend Documentation](https://github.com/omniti-labs/jsend)
 
-# Connect MongoDB with Node.js
+هي مواصفة (specification) أو معيار لتنسيق الاستجابات (responses) في تطبيقات الويب وواجهات برمجة التطبيقات (APIs). الهدف من jSend هو توحيد طريقة إرسال البيانات بين الخادم (server) والعميل (client)، مما يسهل فهم وتحليل الاستجابات من قبل المطورين.
 
-1. ![Connect](image/connect-with-nodejs.png)
-2. ![Set up connection security](image/setup-connection-1.png)
-3. ![Choose a connection method](image/choose-connection-method-2.png)
-4.
+استجابات jSend تعتمد على ثلاثة أنواع رئيسية من الحالات: success، fail، وerror.
 
-```js
-const { MongoClient } = require("mongodb");
+## حالة النجاح (success): تُستخدم عندما تتم العملية بنجاح.
 
-const url =
-  "mongodb+srv://mohamedalimahmoudali:node123@learn-mongo-db.vqka3.mongodb.net/?retryWrites=true&w=majority&appName=learn-mongo-db";
-
-const client = new MongoClient(url);
-
-const main = async () => {
-  await client.connect();
-  console.log("Connecting to the database...");
-
-  const db = client.db("codezone");
-  const collection = db.collection("courses");
-
-  const data = await collection.find({}).toArray();
-  console.log(data);
-};
-
-main();
+```json
+{
+  "status": "success",
+  "data": {
+    "user": {
+      "id": 1,
+      "name": "Ahmed"
+    }
+  }
+}
 ```
+
+## حالة الفشل (fail): تُستخدم عندما يكون هناك خطأ في إدخال البيانات أو مشكلة متوقعة يمكن التعامل معها.
+
+```json
+{
+  "status": "fail",
+  "data": {
+    "error": "Invalid user ID"
+  }
+}
+```
+
+## حالة الخطأ (error): تُستخدم عندما يحدث خطأ غير متوقع أو استثناء (exception) في الخادم.
+
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": 500,
+  "data": null
+}
+```
+
+# بالعامية
+
+# أية هي jSend ؟
+
+jSend هو مجرد قالب أو طريقة مرتبة لكتابة الردود (responses) اللي بتطلع من السيرفر لما تطلب بيانات من API.
+
+# ليه نستخدم jSend ؟
+
+عشان نخلي شكل الردود واضح وموحد، بحيث أي حد يقدر يفهم بسرعة إذا الطلب نجح ولا فشل ولا فيه مشكلة كبيرة.
+
+# ليه ده مفيد؟
+
+1. بيساعدك تعرف بسرعة إذا الطلب نجح ولا لأ.
+2. بيساعدك تبرمج بشكل أسرع وأوضح.
+3. بيخلي تصحيح الأخطاء أسهل.
+4. بيساعدك تكتب كود أنظف وأفضل.
+5. بيساعدك تتعامل مع الأخطاء بشكل أفضل.
+
+# Pagination
+
+لو page = 1 و limit = 10:
+skip = (1 - 1) \* 10 = 0 → يعني مش هنتخطى أي حاجة وهنبدأ من أول عنصر.
+
+لو page = 2 و limit = 5:
+skip = (2 - 1) \* 5 = 5 → يعني هنتخطى أول 5 عناصر وهنبدأ من العنصر السادس.
