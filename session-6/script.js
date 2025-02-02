@@ -13,8 +13,10 @@ app.use(express.json());
 // import mongoose package
 const mongoose = require("mongoose");
 
-const url =
-  "mongodb+srv://mohamedalimahmoudali:node123@learn-mongo-db.vqka3.mongodb.net/codezone?retryWrites=true&w=majority&appName=learn-mongo-db";
+// initialize the dotenv package
+require("dotenv").config();
+
+const url = process.env.MONGODB_URL;
 
 mongoose.connect(url).then(() => {
   console.log("mongodb server is connected");
