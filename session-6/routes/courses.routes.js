@@ -27,6 +27,6 @@ router.patch("/api/courses/:courseId", coursesControllers.updateCourse);
 
 // delete course
 // http://localhost:5000/api/courses/id
-router.delete("/api/courses/:id", coursesControllers.deleteCourse);
+router.delete("/api/courses/:courseId", coursesControllers.deleteCourse);
 
 module.exports = router;
