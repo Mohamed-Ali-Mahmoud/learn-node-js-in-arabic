@@ -1,85 +1,47 @@
-# Add Cousre
+# MonogoDB Atals
 
-## شرح الكود التالي
+1. أذهب إلى الرابط التالي: https://www.mongodb.com/products/platform/atlas-database
+2. اضغط على زر "Start Free" للتسجيل.
+3. سجل بال gmail الخاص بك.
+4. ![Add Project](image/addProject.png)
+5. ![Name Your Project](image/nameYourProject.png)
+6. ![Add Member](image/addMember-1.png)
+7. ![Create a Cluster](image/create-a-cluster.png)
+8. ![Deploy Your Clutser](image/deployYourCluster-1.png)
+9. ![Connect to Your Database](image/connectTo-1.png)
+10. ![Choose a Connection Method](image/choose-a-connection-method-1.png)
+11. ![Connect](image/connect.png)
+12. افتح الكومباس وقم بنسخ الرابط الذي تم الحصول عليه من الخطوة السابقة.
+13. ![MongoDB Compass](image/compass.png)
+14. ![Create Database in Compass](image/compass-create-database-1.png)
+15. ![Insert Document](image/insert-document-1.png)
+16. ![Create Document](image/insert-document-2-1.png)
 
-```js
-const course = { id: courses.length + 1, ...req.body };
-```
+# Connect MongoDB with Node.js
 
-1.  courses.length + 1 هنا سيتم اضافة كورس جديد وذيادة طول المصفوفة بواحد عن طريق الـ
-2.  (...req.body) يتم تفريغ محتوى الريكويست داخل المصفوفة عن طريق الـ
-
-# Update Course
-
-## الفرق بين الـ PUT والـ PATCH
-
-1.  PUT: يستخدم لتحديث البيانات كاملة
-
-مثال : تقوم بمسح الأوبجيت القديم وتقوم بإنشاء أوبجيكت جديد مكانة
-
-2.  PATCH: يستخدم لتحديث البيانات جزئيا
-
-مثال : تقوم بتحديث البيانات الجديدة فقط
-
-مثال لو قمت بإرسال name سيقوم بتحديث الـ name فقط
-
-## شرح الكود التالي
-
-```js
-course = { ...course, ...req.body };
-```
-
-### مثال
-
-الكود التالي سيقوم بعمل تحديث للبيانات القديمة بالبيانات الجديدة
+1. ![Connect](image/connect-with-nodejs.png)
+2. ![Set up connection security](image/setup-connection-1.png)
+3. ![Choose a connection method](image/choose-connection-method-2.png)
+4.
 
 ```js
-const course = {
-  id: 1,
-  name: "JavaScript Basics",
-  price: 100,
+const { MongoClient } = require("mongodb");
+
+const url =
+  "mongodb+srv://mohamedalimahmoudali:node123@learn-mongo-db.vqka3.mongodb.net/?retryWrites=true&w=majority&appName=learn-mongo-db";
+
+const client = new MongoClient(url);
+
+const main = async () => {
+  await client.connect();
+  console.log("Connecting to the database...");
+
+  const db = client.db("codezone");
+  const collection = db.collection("courses");
+
+  const data = await collection.find({}).toArray();
+  console.log(data);
 };
 
-const reqBody = {
-  name: "Advanced JavaScript",
-  price: 150,
-};
-
-const updatedCourse = { ...course, ...reqBody };
-console.log(updatedCourse); // { id: 1, name: 'Advanced JavaScript', price: 150 }
-```
-
-# Delete Course
-
-## شرح الكود التالي
-
-```js
-courses = courses.filter((course) => course.id !== id);
-```
-
-مثال:
-إذا كانت لديك المصفوفة التالية:
-
-```js
-let courses = [
-  { id: 1, name: "Math" },
-  { id: 2, name: "English" },
-  { id: 3, name: "History" },
-];
-let id = 2;
-```
-
-ثم قمت بتطبيق الكود:
-
-```js
-courses = courses.filter((course) => course.id !== id);
-```
-
-ستحصل على النتيجة التالية:
-
-```js
-courses = [
-  { id: 1, name: "Math" },
-  { id: 3, name: "History" },
-];
+main();
 ```
